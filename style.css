@@ -1,0 +1,204 @@
+body {
+    overflow: hidden;
+    background: linear-gradient(to bottom, #fbf8cc, #006d77);
+}
+.me{
+    font-style: normal;
+    font-weight: 50;
+   font-size: 250%;
+}
+/* Recording timer style */
+.recording-timer {
+    position: absolute;
+    top: 20px; /* Adjust the top value as needed */
+    right: 20px; /* Adjust the right value as needed */
+    background-color: transparent; /* No background color */
+    color: #ff0000; /* Red text color */
+    padding: 10px;
+    border: 1px solid #ff0000; /* Red border */
+    border-radius: 5px;
+}
+/* Container style */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 10px; /* Add padding-top to create gap from the top */
+}
+
+/* Style for the video container */
+.video-container {
+    display: flex;
+    /* justify-content: center; */
+    flex-direction: column;
+    align-items: center;
+    margin-left: 20px;
+    margin-right: 80px;
+    margin-top: 20px;
+}
+
+video {
+    max-width: 100%;
+    max-height: 80vh;
+    border: 2px solid #050101;
+}
+.raised-hand-indicator {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background-color: transparent; /* No background color */
+    color: #ff0000; /* Red text color */
+    padding: 10px;
+    border: 1px solid #ff0000; /* Red border */
+    border-radius: 5px;
+    display: none; /* Initially hidden */
+    font-size: 16px; /* Adjust the font size as needed */
+}
+
+/* Style for the button container */
+.button-container {
+    display: flex;
+    flex-direction: row; /* Stack buttons horizontally */
+    justify-content: flex-start; /* Align buttons to the left */
+    align-items: flex-start; /* Align buttons to the top */
+    margin-top: 20px; /* Add margin-top to create a gap from the top */
+    margin-right: 24%;
+}
+
+/* Modified styles for buttons */
+.action-button {
+    background-color: #181818b3;
+    color: #fff;
+    border: none;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #000000;
+    font-size: 18px;
+    margin: 3px;
+}
+
+.action-button:hover {
+    background-color: #014f86;
+}
+
+/* Icons with color */
+.icon {
+    font-size: 24px;
+}
+
+/* Color specific to each button */
+#mute-toggle .icon {
+    color: #fffcfb;
+}
+
+#camera-toggle .icon {
+    color: #fefdfd;
+}
+
+#cut-call .icon {
+    color: #fffcfb;
+}
+
+#record-toggle .icon {
+    color: #fffcfb;
+}
+
+
+/* Style for the "Join Meeting" button */
+#join-meeting {
+    background-color: #212529;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+#join-meeting:hover {
+    background-color: #0056b3;
+}
+.content {
+    display: flex;
+    flex-direction: row; /* Stack video and meeting-input horizontally */
+    justify-content: flex-end; /* Align to the right */
+    align-items: flex-end; /* Align to the bottom */
+}
+
+/* Style for the "Enter Meeting Code" text input */
+#code-input {
+    width: 200px; /* Adjust the width as needed */
+    height: 20px; /* Adjust the height as needed */
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #000;
+    margin-bottom: 2px; /* Adjust the margin size as needed */
+    
+    
+}
+.meeting-text {
+    width: 200px; /* Increase the width as needed */
+    height: 20px; /* Increase the height as needed */
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: 2px solid #000;
+    
+  
+}
+#chat-box {
+    display: flex;
+    flex-direction: column;
+    border: none; /* Remove border */
+    border-radius: 5px;
+    padding: 10px;
+    max-height: 300px;
+    margin-bottom: 42%;
+    
+    
+}
+/* Text Message Input Style */
+#text-message {
+    width: 100%; /* Text message input ka width 60% set karein */
+    height: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #000;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+    float: right; /* Text message ko right side shift karein */
+  
+}
+
+/* Style for the "Send" button */
+#send-button {
+     background-color: #212529;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s;
+    max-width: 30%;
+}
+#send-button:hover {
+    background-color: #0056b3;
+}
+
+
+
+
+
+

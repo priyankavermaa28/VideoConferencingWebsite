@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Conferencing</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1 class="me">Video Conferencing Website</h1>
+        <div class="recording-timer" id="recording-timer">Recording: 00:00</div>
+        <div class="content">
+            <div class="video-container">
+                <video id="local-video" autoplay muted></video>
+            </div>
+            <div class="meeting-input">
+                <!-- Chat box goes here -->
+                <div id="chat-box"> 
+                    <!-- <div id="chat-messages"></div> -->
+                    <input type="text" id="text-message" placeholder="Type your message here...">
+                    <button id="send-button">Send</button>
+                 </div> 
+                <!-- Text input for entering the code -->
+                <input id="code-input" type="text" class="meeting-text" placeholder="Enter the meeting code...">
+                <!-- Join Meeting button -->
+                <button id="join-meeting" class="meeting-button">Join</button>
+            </div>
+        </div>
+        <div class="button-container">
+            <!-- Mute/Unmute button -->
+            <button id="mute-toggle" class="action-button"><i class="fas fa-microphone icon"></i></button>
+            <!-- Camera On/Off button -->
+            <button id="camera-toggle" class="action-button"><i class="fas fa-video icon"></i></button>
+            <!-- End Call button -->
+            <button id="cut-call" class="action-button"><i class="fas fa-phone icon"></i></button>
+            <!-- Record button -->
+            <button id="record-toggle" class="action-button"><i class="fas fa-circle icon"></i></button>
+            <!-- Raise hand button -->
+            <button id="raise-hand" class="action-button"><i class="fas fa-hand-paper icon"></i></button>
+            <!-- Placeholder for raised hands -->
+            <div id="raised-hand-indicator" class="raised-hand-indicator">Hand Raised</div>
+        </div>
+    </div>
+     <script>
+        
+        let mediaRecorder;
+let recordedChunks = [];
+let recordingStartTime = 0;
+let recordingInterval;
+
+// Function to update the recording timer
+function updateRecordingTimer() {
+    const recordingTimer = document.getElementById("recording-timer");
+    const currentTime = new Date().getTime();
+    const elapsedSeconds = Math.floor((currentTime - recordingStartTime) / 1000);
+    const minutes = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+    const seconds = String(elapsedSeconds % 60).padStart(2, '0');
+    recordingTimer.textContent = `Recording: ${minutes}:${seconds}`;
+}
+
+// Function to start the recording timer
+function startRecordingTimer() {
+    recordingStartTime = new Date().getTime();
+    recordingInterval = setInterval(updateRecordingTimer, 1000); // Update every second
+}
+
+// Function to stop the recording timer
+function stopRecordingTimer() {
+    clearInterval(recordingInterval);
+    recordingStartTime = 0;
+    updateRecordingTimer(); // Reset the timer display
+}
+
+// Function to toggle start/stop recording
+function toggleRecording() {
+    const recordToggleBtn = document.getElementById("record-toggle");
+    if (mediaRecorder.state === "inactive") {
+        mediaRecorder.start();
+        startRecordingTimer(); // Start the recording timer
+        recordToggleBtn.innerHTML = "start";
+    } else {
+        mediaRecorder.stop();
+        stopRecordingTimer(); // Stop the recording timer
+        recordToggleBtn.innerHTML = "stop";
+    }
+}
+
+// JavaScript code to access and display video streams
+async function startVideo() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        const localVideo = document.getElementById("local-video");
+        localVideo.srcObject = stream;
+
+        // Create a MediaRecorder to record video
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = handleDataAvailable;
+        mediaRecorder.onstop = handleStop;
+
+        // Add your code to set up remote video streams here
+
+    } catch (error) {
+        console.error("Error accessing webcam:", error);
+    }
+}
+
+// Function to cut the call
+function cutCall() {
+    // Add code here to end the call, close connections, etc.
+    alert("Call cut!");
+}
+
+// Function to toggle mute/unmute
+function toggleMute() {
+    const localVideo = document.getElementById("local-video");
+    const tracks = localVideo.srcObject.getAudioTracks();
+
+    tracks.forEach((track) => {
+        track.enabled = !track.enabled;
+    });
+
+    // Update button text based on mute state
+    const muteToggleBtn = document.getElementById("mute-toggle");
+    if (tracks[0].enabled) {
+        muteToggleBtn.innerHTML = '<i class="fas fa-microphone icon"></i>';
+    } else {
+        muteToggleBtn.innerHTML = '<i class="fas fa-microphone-slash icon"></i>';
+    }
+}
+
+// Function to toggle camera on/off
+function toggleCamera() {
+    const localVideo = document.getElementById("local-video");
+    const tracks = localVideo.srcObject.getVideoTracks();
+
+    tracks.forEach((track) => {
+        track.enabled = !track.enabled;
+    });
+
+    // Update button text and icon based on camera state
+    const cameraToggleBtn = document.getElementById("camera-toggle");
+    if (tracks[0].enabled) {
+        cameraToggleBtn.innerHTML = '<i class="fas fa-video icon"></i>';
+    } else {
+        cameraToggleBtn.innerHTML = '<i class="fas fa-video-slash icon"></i>';
+    }
+}
+
+// Function to handle data available for recording
+function handleDataAvailable(event) {
+    if (event.data.size > 0) {
+        recordedChunks.push(event.data);
+    }
+}
+
+// Function to handle recording stop
+function handleStop() {
+    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "recorded-video.webm";
+    a.click();
+
+    recordedChunks = [];
+}
+
+// Function to raise the hand and display an indicator
+function raiseHand() {
+    const raisedHandIndicator = document.getElementById("raised-hand-indicator");
+
+    // Toggle the visibility of the raised hand indicator
+    if (raisedHandIndicator.style.display === "none") {
+        raisedHandIndicator.style.display = "block";
+    } else {
+        raisedHandIndicator.style.display = "none";
+    }
+}
+// Get references to chat elements
+const chatMessages = document.getElementById("chat-messages"); // Uncomment this line
+const messageInput = document.getElementById("text-message");
+const sendButton = document.getElementById("send-button");
+
+// Event listener for the "Send" button
+sendButton.addEventListener("click", () => {
+    const message = messageInput.value;
+    if (message.trim() !== "") {
+        // Create a new message element
+        const newMessage = document.createElement("div");
+        newMessage.className = "user-message";
+        newMessage.textContent = message;
+
+        // Append the new message to the chat display
+        chatMessages.appendChild(newMessage); // Uncomment this line
+
+        // Clear the input field
+        messageInput.value = "";
+
+        // You can also send the message to other participants in the video conference using WebSockets or a backend server.
+        // Add code here to send the message to other participants.
+        // For demonstration, you can log the message to the console.
+        console.log("User Message: " + message);
+    }
+});
+// Call the startVideo function when the page loads
+window.addEventListener("load", startVideo);
+
+// Add event listener for the "Cut Call" button
+const cutCallButton = document.getElementById("cut-call");
+cutCallButton.addEventListener("click", cutCall);
+
+// Add event listener for the "Mute/Unmute" button
+const muteToggleBtn = document.getElementById("mute-toggle");
+muteToggleBtn.addEventListener("click", toggleMute);
+
+// Add event listener for the "Camera On/Off" button
+const cameraToggleBtn = document.getElementById("camera-toggle");
+cameraToggleBtn.addEventListener("click", toggleCamera);
+
+// Add event listener for the "Start/Stop Recording" button
+const recordToggleBtn = document.getElementById("record-toggle");
+recordToggleBtn.addEventListener("click", toggleRecording);
+
+// Add event listener for the "Raise Hand" button
+const raiseHandButton = document.getElementById("raise-hand");
+raiseHandButton.addEventListener("click", raiseHand);
+        
+    </script>
+</body>
+</html>
